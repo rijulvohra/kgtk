@@ -240,6 +240,7 @@ class TripleGenerator(Generator):
                         node2, node1
                     )
                 )
+        
 
     def _node_2_entity(self, node: str):
         '''
@@ -317,6 +318,7 @@ class TripleGenerator(Generator):
         entity.add_alias(text_string, lang=lang)
         self.doc.kg.add_subject(entity)
         return True
+        
 
     def generate_prop_declaration_triple(self, node1: str, node2: str) -> bool:
         # update the known prop_types
@@ -339,7 +341,10 @@ class TripleGenerator(Generator):
         if edge_type == Item:
             object = WDItem(TripleGenerator.replace_illegal_string(node2))
         elif edge_type == WDProperty:
-            object = WDProperty(TripleGenerator.replace_illegal_string(node2), self.prop_types[node2])
+            try:
+                object = WDProperty(TripleGenerator.replace_illegal_string(node2), self.prop_types[node2])
+            except:
+                return False
 
         elif edge_type == TimeValue:
             if self.yyyy_mm_dd_pattern.match(node2):
